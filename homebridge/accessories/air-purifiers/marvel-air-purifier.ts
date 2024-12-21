@@ -26,8 +26,6 @@ export class MarvelAirPurifier extends Accessory<MarvelAirPurifierInterface> {
 
     private airPurifierService?: Service;
     private airQualityService?: Service;
-    private humiditySensorService?: Service;
-    private temperatureSensorService?: Service;
     private lightbulbService?: Service;
 
     constructor(log: Logging, api: API, deviceInfo: Device, service: CowayService, platformAccessory: PlatformAccessory) {
@@ -74,10 +72,10 @@ export class MarvelAirPurifier extends Accessory<MarvelAirPurifierInterface> {
             this.setOptionalCharacteristic(this.api.hap.Characteristic.VOCDensity, this.airQualityService, ctx.indoorAirQuality.vocDensity);
 
             // Humidity Sensors
-            this.setOptionalCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity, this.humiditySensorService, ctx.indoorAirQuality.humidity);
+            // this.setOptionalCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity, this.humiditySensorService, ctx.indoorAirQuality.humidity);
 
             // Temperature Sensors
-            this.setOptionalCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity, this.temperatureSensorService, ctx.indoorAirQuality.temperature);
+            // this.setOptionalCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity, this.temperatureSensorService, ctx.indoorAirQuality.temperature);
         });
     }
 
@@ -136,8 +134,8 @@ export class MarvelAirPurifier extends Accessory<MarvelAirPurifierInterface> {
         this.airPurifierService = this.registerAirPurifierService();
 
         this.airQualityService = this.registerAirQualityService();
-        this.humiditySensorService = this.registerHumiditySensorService();
-        this.temperatureSensorService = this.registerTemperatureSensorService();
+        //this.humiditySensorService = this.registerHumiditySensorService();
+        //this.temperatureSensorService = this.registerTemperatureSensorService();
         this.lightbulbService = this.registerLightbulbService();
     }
 
@@ -158,10 +156,10 @@ export class MarvelAirPurifier extends Accessory<MarvelAirPurifierInterface> {
     getIndoorAirQuality(statusInfo: any): IndoorAirQuality {
         const response = statusInfo["IAQ"];
         return {
-            humidity: this.parseNullableFloat(response["humidity"]),
+            //humidity: this.parseNullableFloat(response["humidity"]),
             pm25Density: this.parseNullableFloat(response["dustpm25"]),
             pm10Density: this.parseNullableFloat(response["dustpm10"]),
-            temperature: this.parseNullableFloat(response["temperature"]),
+            //temperature: this.parseNullableFloat(response["temperature"]),
             vocDensity: this.parseNullableFloat(response["vocs"])
         };
     }
@@ -420,29 +418,29 @@ export class MarvelAirPurifier extends Accessory<MarvelAirPurifierInterface> {
         return service;
     }
 
-    registerHumiditySensorService(): Service {
-        const service = this.ensureServiceAvailability(this.api.hap.Service.HumiditySensor);
-        service.getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
-            .on(CharacteristicEventTypes.GET, this.wrapGet((callback: CharacteristicGetCallback) => {
-                const ctx = this.platformAccessory.context as MarvelAirPurifierInterface;
-                const airQuality = ctx.indoorAirQuality;
+    // registerHumiditySensorService(): Service {
+    //     const service = this.ensureServiceAvailability(this.api.hap.Service.HumiditySensor);
+    //     service.getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
+    //         .on(CharacteristicEventTypes.GET, this.wrapGet((callback: CharacteristicGetCallback) => {
+    //             const ctx = this.platformAccessory.context as MarvelAirPurifierInterface;
+    //             const airQuality = ctx.indoorAirQuality;
 
-                callback(undefined, airQuality.humidity);
-            }));
-        return service;
-    }
+    //             callback(undefined, airQuality.humidity);
+    //         }));
+    //     return service;
+    // }
 
-    registerTemperatureSensorService(): Service {
-        const service = this.ensureServiceAvailability(this.api.hap.Service.TemperatureSensor);
-        service.getCharacteristic(this.api.hap.Characteristic.CurrentTemperature)
-            .on(CharacteristicEventTypes.GET, this.wrapGet((callback: CharacteristicGetCallback) => {
-                const ctx = this.platformAccessory.context as MarvelAirPurifierInterface;
-                const airQuality = ctx.indoorAirQuality;
+    // registerTemperatureSensorService(): Service {
+    //     const service = this.ensureServiceAvailability(this.api.hap.Service.TemperatureSensor);
+    //     service.getCharacteristic(this.api.hap.Characteristic.CurrentTemperature)
+    //         .on(CharacteristicEventTypes.GET, this.wrapGet((callback: CharacteristicGetCallback) => {
+    //             const ctx = this.platformAccessory.context as MarvelAirPurifierInterface;
+    //             const airQuality = ctx.indoorAirQuality;
 
-                callback(undefined, airQuality.temperature);
-            }));
-        return service;
-    }
+    //             callback(undefined, airQuality.temperature);
+    //         }));
+    //     return service;
+    // }
 
     /*
     registerFilterMaintenanceService(): Service[] {
