@@ -8,11 +8,9 @@ export interface FilterInfo {
 }
 
 export interface IndoorAirQuality {
-    humidity?: number;
     pm25Density?: number;
     pm10Density?: number;
     vocDensity?: number;
-    temperature?: number;
 }
 
 export interface LightbulbControlInfo {
